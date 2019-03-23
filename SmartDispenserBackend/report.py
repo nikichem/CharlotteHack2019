@@ -17,15 +17,21 @@ def empty(id, status):
     elif status is None or status is not 0 or status is not 1:
         error = 'status must be either 0 or 1'
 
-    # TODO: add authentication validation and check for machine existence
+    # verify a machine exists
+    db = get_db()
+    machine_count = db.execute('SELECT COUNT(*) FROM machine WHERE id = ?', (id)).fetchall()
 
+    if machine_count is None:
+        error = 'machine with {0} number does not exist'.format(id)
+
+    # display error if exists, else update
     if error is not None:
         flash(error)
-
-    db = get_db()
-    db.execute('UPDATE machine SET empty = ? WHERE id = ?', (status, id))
-    # TODO: update user's points
-    db.commit()
+    else:
+        db.execute('UPDATE machine SET empty = ? WHERE id = ?', (status, id))
+        count = db.execute('SELECT points FROM user WHERE userName = ?', ()).fetchone()
+        db.execute('UPDATE user SET points = ? WHERE id = ?', (count+1,))
+        db.commit()
 
     return 200
 
@@ -41,14 +47,20 @@ def missing(id, status):
     elif status is None or status is not 0 or status is not 1:
         error = 'status must be either 0 or 1'
 
-    # TODO: add authentication validation and check for machine existence
+    # verify a machine exists
+    db = get_db()
+    machine_count = db.execute('SELECT COUNT(*) FROM machine WHERE id = ?', (id)).fetchall()
 
+    if machine_count is None:
+        error = 'machine with {0} number does not exist'.format(id)
+
+    # display error if exists, else update
     if error is not None:
         flash(error)
-
-    db = get_db()
-    db.execute('UPDATE machine set missing = ? WHERE id = ?', (status, id))
-    db.commit()
+    else:
+        db.execute('UPDATE machine set missing = ? WHERE id = ?', (status, id))
+        # TODO: update user's points
+        db.commit()
 
     return 200
 

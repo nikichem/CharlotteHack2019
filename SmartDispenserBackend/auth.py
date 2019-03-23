@@ -1,8 +1,8 @@
 import functools
-
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from SmartDispenserBackend.db import get_db
+from flask_login import user_loaded_from_header
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 

@@ -13,7 +13,7 @@ CREATE TABLE machine (
   address TEXT NOT NULL,
   contentType TEXT NOT NULL,
   maintenancePersonnel TEXT NOT NULL,
-  maintenancePersonnelEmail TEXT NOT NULL
+  maintenancePersonnelEmail TEXT NOT NULL,
   missing INTEGER,
   empty INTEGER
 );
